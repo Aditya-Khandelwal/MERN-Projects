@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;padding: 0;box-sizing: border-box;
+        }
+        .main{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .box{
+            width: 20%;
+            height: 155px;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+        }
+        .overlay{
+            width: 100vw;
+            height: 100vh;
+            transform: scale(0);
+            background-color: red;
+            transition: 0.2s;
+            font-size: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .showoverlay{
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="main"></div>
+    <audio class="audio" src="ping.mp3"></audio>
+    <div class="overlay"></div>
+</body>
+<script>
+    var main = document.querySelector(".main");
+    var overlay = document.querySelector(".overlay");
+    var audio = document.querySelector(".audio")
+
+    for(var i=1; i<=25; i++){
+        var box = document.createElement("div");
+        box.classList.add("box");
+        var code = getcolorcode();
+        box.innerText = code;
+        main.appendChild(box);
+        box.style.background = code;
+    }
+
+    function getcolorcode(){
+        var red = Math.floor(Math.random() * 256).toString(16);
+        var green = Math.floor(Math.random() * 256).toString(16);
+        var blue = Math.floor(Math.random() * 256).toString(16);
+        
+        var colorcode = ("#" + red + green + blue);
+        if (colorcode.length == 7) {
+            return colorcode;
+        }else{
+            return getcolorcode();
+        }
+    }
+
+    var boxes = document.querySelectorAll(".box");
+    for(var bx of boxes){
+        bx.addEventListener(
+            'click', function(){
+                audio.play();
+                overlay.classList.add("showoverlay");
+                overlay.style.background = this.innerText;
+                overlay.innerText = this.innerText;
+                navigator.clipboard.writeText(this.innerText);
+                setTimeout(
+                    function(){
+                        overlay.classList.remove("showoverlay"); 
+                    }, 500
+                )
+            }
+        )
+    }
+    
+</script>
+</html>
